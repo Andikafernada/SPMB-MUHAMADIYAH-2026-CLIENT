@@ -5,13 +5,19 @@ import GuruSection from "../src/components/GuruSection";
 import PPDBSection from "../src/components/PPDBSection";
 import Footer from "../src/components/Footer";
 import FloatingWA from "../src/components/FloatingWA";
-import { urlFor } from "../lib/client"; // Pastikan fungsi urlFor sudah ada untuk gambar
+import { urlFor } from "../lib/client";
 
 export default async function Home() {
-  // AMBIL DATA ASLI DARI SANITY
+  // 1. AMBIL SEMUA DATA DARI SANITY
   const daftarBerita = await client.fetch('*[_type == "berita"] | order(_createdAt desc)');
   const daftarGuru = await client.fetch('*[_type == "guru"] | order(nama asc)');
   const daftarFasilitas = await client.fetch('*[_type == "fasilitas"]');
+  
+  // Ambil data PPDB (Informasi Biaya & Alur)
+  const dataPPDB = await client.fetch('*[_type == "ppdb"][0]');
+
+  // Ambil data Setelan (Untuk Alamat & Sosmed di Footer)
+  const dataSetelan = await client.fetch('*[_type == "setelan"][0]');
 
   return (
     <main className="min-h-screen bg-slate-50 font-sans scroll-smooth">
@@ -30,10 +36,13 @@ export default async function Home() {
       </nav>
 
       <HeroSection />
-      <PPDBSection />
+
+      {/* 2. KIRIM DATA PPDB KE KOMPONEN */}
+      <PPDBSection dataPPDB={dataPPDB} />
+
       <GuruSection daftarGuru={daftarGuru} />
 
-      {/* FASILITAS SECTION (DATA ASLI) */}
+      {/* FASILITAS SECTION */}
       <section id="fasilitas" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-8">
             <h2 className="text-4xl font-extrabold text-slate-800 text-center mb-4">Fasilitas Sekolah</h2>
@@ -61,7 +70,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* BERITA SECTION (DATA ASLI) */}
+      {/* BERITA SECTION */}
       <section id="berita" className="py-24 px-8 max-w-6xl mx-auto flex flex-col items-center">
         <h2 className="text-4xl font-extrabold text-slate-800 mb-4">Berita & Pengumuman</h2>
         <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mb-16"></div>
@@ -87,7 +96,9 @@ export default async function Home() {
         </div>
       </section>
 
-      <Footer />
+     {/* Kirim dataSetelan yang tadi sudah di-fetch dari Sanity */}
+<Footer dataSetelan={dataSetelan} />
+      
       <FloatingWA />
     </main>
   );

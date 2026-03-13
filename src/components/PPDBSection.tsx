@@ -1,69 +1,55 @@
-"use client";
+import Link from "next/link";
 
-export default function PPDBSection() {
-  const alurDaftar = [
-    "Isi formulir online di website ini",
-    "Upload berkas (KK, Akta, Ijazah)",
-    "Tes Observasi & Wawancara",
-    "Pengumuman kelulusan & Daftar Ulang"
-  ];
+export default function PPDBSection({ dataPPDB }: { dataPPDB: any }) {
+  const linkWhatsApp = `https://wa.me/${dataPPDB?.nomorWhatsApp || '628'}?text=Halo%20Admin%20PPDB...`;
 
   return (
-    <section className="py-24 bg-white">
+    <section id="ppdb" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-slate-800 mb-4">Informasi PPDB 2026/2027</h2>
-          <p className="text-slate-500">Semua informasi pendaftaran dalam satu pintu</p>
+          <h2 className="text-4xl font-black text-slate-800">Informasi PPDB {dataPPDB?.tahunAjaran}</h2>
+          <p className="text-slate-500 mt-4 text-lg">{dataPPDB?.tagline}</p>
+          <div className="w-24 h-1.5 bg-blue-600 mx-auto rounded-full mt-6"></div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-16">
-          
-          {/* Bagian Kiri: Rincian Biaya */}
-          <div className="bg-blue-600 p-10 rounded-[40px] text-white shadow-2xl shadow-blue-200">
-            <h3 className="text-2xl font-bold mb-8 flex items-center">
-              <span className="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-4">💰</span>
-              Estimasi Biaya
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          {/* SEKSI BIAYA */}
+          <div className="bg-blue-600 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden">
+            <h3 className="text-3xl font-black mb-10 flex items-center gap-4">
+              <span className="bg-white p-2 rounded-xl">💰</span> Estimasi Biaya
             </h3>
-            <div className="space-y-6">
-              <div className="flex justify-between border-b border-blue-400 pb-4">
-                <span className="font-medium opacity-90 text-lg">Gelombang 1</span>
-                <span className="font-black text-xl">Rp 2.500.000</span>
-              </div>
-              <div className="flex justify-between border-b border-blue-400 pb-4 text-yellow-300">
-                <span className="font-medium text-lg italic">Gelombang 2 (Skg)</span>
-                <span className="font-black text-xl">Rp 3.000.000</span>
-              </div>
-              <div className="flex justify-between opacity-60 pb-4">
-                <span className="font-medium text-lg">Gelombang 3</span>
-                <span className="font-black text-xl">Rp 3.500.000</span>
-              </div>
-              <p className="text-xs italic opacity-70 mt-4">*Biaya sudah termasuk seragam, buku, dan uang gedung.</p>
-            </div>
-          </div>
-
-          {/* Bagian Kanan: Alur Pendaftaran */}
-          <div className="flex flex-col justify-center">
-            <h3 className="text-2xl font-bold text-slate-800 mb-8 flex items-center">
-              <span className="bg-blue-100 text-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-4">📝</span>
-              Alur Pendaftaran
-            </h3>
-            <div className="space-y-8 relative">
-              {/* Garis vertikal dekorasi */}
-              <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-slate-100 -z-10"></div>
-              
-              {alurDaftar.map((step, i) => (
-                <div key={i} className="flex items-center group">
-                  <div className="w-10 h-10 rounded-full bg-slate-50 border-2 border-slate-100 flex items-center justify-center font-bold text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all mr-6">
-                    {i + 1}
-                  </div>
-                  <p className="text-lg font-semibold text-slate-600 group-hover:text-slate-900 transition-colors">
-                    {step}
-                  </p>
+            <div className="space-y-5">
+              {dataPPDB?.gelombangBiaya?.map((item: any, i: number) => (
+                <div key={i} className={`flex justify-between items-center border-b border-white/20 pb-4 ${item.isSekarang ? 'bg-white/10 p-4 rounded-2xl border-none' : ''}`}>
+                  <span className={`text-lg ${item.isSekarang ? 'font-bold text-yellow-300' : 'opacity-90'}`}>
+                    {item.nama} {item.isSekarang && '(Skg)'}
+                  </span>
+                  <span className={`text-xl ${item.isSekarang ? 'font-black text-yellow-300 text-2xl' : 'font-bold'}`}>
+                    Rp {item.biaya}
+                  </span>
                 </div>
               ))}
             </div>
+            <p className="mt-10 text-sm text-blue-100 italic">*Biaya sudah termasuk seragam, buku, dan uang gedung.</p>
           </div>
 
+          {/* SEKSI ALUR */}
+          <div className="bg-white rounded-[40px] p-10 shadow-sm border border-slate-100">
+            <h3 className="text-3xl font-black text-slate-800 mb-10 flex items-center gap-4">
+              <span className="bg-blue-100 p-2 rounded-xl">📝</span> Alur Pendaftaran
+            </h3>
+            <div className="space-y-8 relative">
+              {dataPPDB?.alurPendaftaran?.map((langkah: string, i: number) => (
+                <div key={i} className="flex gap-6 relative z-10">
+                  <div className="bg-blue-600 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold shrink-0 shadow-lg">{i + 1}</div>
+                  <p className="text-slate-700 font-medium pt-1">{langkah}</p>
+                </div>
+              ))}
+            </div>
+            <Link href={linkWhatsApp} target="_blank" className="block text-center bg-blue-600 text-white py-5 rounded-2xl font-black text-xl mt-12 hover:bg-blue-700 transition-all">
+              DAFTAR SEKARANG 🚀
+            </Link>
+          </div>
         </div>
       </div>
     </section>
