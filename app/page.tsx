@@ -23,7 +23,7 @@ export default async function Home() {
         </div>
         <ul className="hidden md:flex space-x-8 font-medium">
           <li><Link href="/" className="hover:text-yellow-300 transition">Beranda</Link></li>
-          <li><Link href="/profil" className="hover:text-yellow-300 transition">Profil</Link></li>
+          <li><Link href="/profile" className="hover:text-yellow-300 transition">Profil</Link></li>
           <li><Link href="#fasilitas" className="hover:text-yellow-300 transition">Fasilitas</Link></li>
           <li><Link href="#berita" className="hover:text-yellow-300 transition">Berita</Link></li>
         </ul>
